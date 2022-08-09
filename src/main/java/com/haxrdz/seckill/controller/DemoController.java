@@ -1,4 +1,4 @@
-package com.haxrdz.seckill.contoller;
+package com.haxrdz.seckill.controller;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
