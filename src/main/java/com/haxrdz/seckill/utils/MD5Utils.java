@@ -26,8 +26,10 @@ public class MD5Utils {
     }
 
     public static void main(String[] args) {
+        // 3288306b519f4822dc4a04db6f92b20f
         System.out.println(inputStr2ServerStr("123456"));
         System.out.println(serverStr2DBStr("3288306b519f4822dc4a04db6f92b20f", "1a2b3c4d"));
+        // 91745d7b9d24350dd46aaf8356c698ac
         System.out.println(inputStr2DBStr("123456", "1a2b3c4d"));
     }
 }

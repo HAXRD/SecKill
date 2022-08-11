@@ -2,6 +2,8 @@ package com.haxrdz.seckill.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.haxrdz.seckill.pojo.User;
+import com.haxrdz.seckill.vo.LoginVo;
+import com.haxrdz.seckill.vo.RespBean;
 
 /**
  * <p>
@@ -13,4 +15,5 @@ import com.haxrdz.seckill.pojo.User;
  */
 public interface IUserService extends IService<User> {
 
+    RespBean doLogin(LoginVo loginVo);
 }

@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Welcome</title>
+    <!-- Font Awesome -->
+    <link
+            href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
+            rel="stylesheet"
+    />
+    <!-- Google Fonts -->
+    <link
+            href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap"
+            rel="stylesheet"
+    />
+    <!-- MDB -->
+    <link
+            href="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/4.4.0/mdb.min.css"
+            rel="stylesheet"
+    />
+    <!-- MDB -->
+    <script
+            type="text/javascript"
+            src="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/4.4.0/mdb.min.js"
+    ></script>
+    <!--md5-->
+      <script
+              type="text/javascript"
+              src="https://cdnjs.cloudflare.com/ajax/libs/blueimp-md5/2.19.0/js/md5.min.js">
+      </script>
+    <!--common-->
+    <script type="text/javascript"
+            th:src="@{/js/common.js}"></script>
+    <script type="text/javascript"
+            th:src="@{/js/layer.js}"></script>
+    <!--jquery-->
+  <script type="text/javascript"
+          th:src="@{/js/jquery.min.js}"></script>
+    <!--jquery-validator-->
+  <script type="text/javascript"
+          th:src="@{/jquery-validation/jquery.validate.min.js}"></script>
+  <script type="text/javascript"
+          th:src="@{/jquery-validation/localization/messages_zh.min.js}"></script>
+</head>
+<body>
+
+<section class="vh-100" style="background-color: #508bfc;">
+    <div class="container py-5 h-100">
+        <div class="row d-flex justify-content-center align-items-center h-100">
+            <div class="col-12 col-md-8 col-lg-6 col-xl-5">
+                <div class="card shadow-2-strong" style="border-radius: 1rem;">
+                    <div class="card-body p-5 text-center">
+                        <form name="loginForm" id="loginForm" method="post" style="width: 50%; margin: 0 auto">
+
+                            <h2 style="text-align: center; margin-bottom: 20px">Welcome!</h2>
+                            <!--Phone input-->
+                            <div class="form-outline mb-4">
+                                <input type="tel" id="mobile" class="form-control" required="true"
+                                       minlength="11" maxlength="11"/>
+                                <label class="form-label" for="mobile">Phone</label>
+                            </div>
+
+                            <!--Password input-->
+                            <div class="form-outline mb-4">
+                                <input type="password" id="password" class="form-control" required="true"
+                                       minlength="6" maxlength="16"/>
+                                <label class="form-label" for="password">Password</label>
+                            </div>
+
+                            <!--登录和重置-->
+                            <button type="submit" onclick="login()" class="btn btn-primary btn-block mb-4">Sign in</button>
+                            <button type="reset" onclick="reset()" class="btn btn-primary btn-block mb-4">Reset</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+</body>
+<script>
+  function login() {
+    $("#loginForm").validate({
+      submitHandler: function (form) {
+        doLogin();
+      }
+    });
+  }
+
+  function doLogin() {
+    var inputPass = $("#password").val();
+    var salt = g_password_salt;
+    var str = inputPass + salt.charAt(3) + salt.charAt(2) + salt.charAt(5);
+    var pass = md5(str);
+    $.ajax({
+      url: "/login/doLogin",
+      type: "POST",
+      data: {
+        mobile: $("#mobile").val(),
+        password: pass.toString()
+      },
+      success: function (data) {
+        if (data.code == 200) {
+            msg("成功");
+        } else {
+            msg(data.message);
+        }
+      },
+      error: function () {
+        msg("失败");
+      }
+    })
+  }
+</script>
+</html>
