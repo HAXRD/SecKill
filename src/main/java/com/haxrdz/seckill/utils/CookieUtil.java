@@ -39,8 +39,8 @@ public final class CookieUtil {
                     } else {
                         retValue = cookieList[i].getValue();
                     }
+                    break;
                 }
-                break;
             }
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();

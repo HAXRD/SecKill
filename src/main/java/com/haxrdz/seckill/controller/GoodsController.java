@@ -22,23 +22,21 @@ public class GoodsController {
 
     /**
      * 获取商品列表
-     * @param request
-     * @param response
      * @param model
-     * @param ticket
+     * @param user
      * @return
      */
     @RequestMapping("/toList")
 //    public String toList(HttpSession session, Model model, @CookieValue("userTicket") String ticket) {
-    public String toList(HttpServletRequest request, HttpServletResponse response, Model model, @CookieValue("userTicket") String ticket) {
-        if (StringUtils.isEmpty(ticket)) {
-            return "login";
-        }
-//        User user = (User) session.getAttribute(ticket);
-        User user = userService.getUserByCookie(ticket, request, response);
-        if (user == null) {
-            return "login";
-        }
+    public String toList(Model model, User user) {
+//        if (StringUtils.isEmpty(ticket)) {
+//            return "login";
+//        }
+////        User user = (User) session.getAttribute(ticket);
+//        User user = userService.getUserByCookie(ticket, request, response);
+//        if (user == null) {
+//            return "login";
+//        }
         model.addAttribute("user", user);
         return "goodsList";
     }
