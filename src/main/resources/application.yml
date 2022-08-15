@@ -30,7 +30,7 @@ spring:
 # Mybatis-plus ??
 mybatis-plus:
   # ?? Mapper.xml ??
-  mapper-locations: classpath*:/mapper/*Mapper.xml
+  mapper-locations: classpath:mapper/*.xml
   # ?? MyBatis ??????
   type-aliases-package: com.haxrdz.seckill.pojo
 
