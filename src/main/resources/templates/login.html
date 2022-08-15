@@ -102,6 +102,7 @@
       success: function (data) {
         if (data.code == 200) {
             msg("成功");
+            window.location.href = "/goods/toList";
         } else {
             msg(data.message);
         }
