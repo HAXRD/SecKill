@@ -24,23 +24,23 @@
             src="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/4.4.0/mdb.min.js"
     ></script>
     <!--md5-->
-      <script
-              type="text/javascript"
-              src="https://cdnjs.cloudflare.com/ajax/libs/blueimp-md5/2.19.0/js/md5.min.js">
-      </script>
+    <script
+            type="text/javascript"
+            src="https://cdnjs.cloudflare.com/ajax/libs/blueimp-md5/2.19.0/js/md5.min.js">
+    </script>
     <!--common-->
     <script type="text/javascript"
             th:src="@{/js/common.js}"></script>
     <script type="text/javascript"
             th:src="@{/js/layer.js}"></script>
     <!--jquery-->
-  <script type="text/javascript"
-          th:src="@{/js/jquery.min.js}"></script>
+    <script type="text/javascript"
+            th:src="@{/js/jquery.min.js}"></script>
     <!--jquery-validator-->
-  <script type="text/javascript"
-          th:src="@{/jquery-validation/jquery.validate.min.js}"></script>
-  <script type="text/javascript"
-          th:src="@{/jquery-validation/localization/messages_zh.min.js}"></script>
+    <script type="text/javascript"
+            th:src="@{/jquery-validation/jquery.validate.min.js}"></script>
+    <script type="text/javascript"
+            th:src="@{/jquery-validation/localization/messages_zh.min.js}"></script>
 </head>
 <body>
 
@@ -79,38 +79,38 @@
 </section>
 </body>
 <script>
-  function login() {
-    $("#loginForm").validate({
-      submitHandler: function (form) {
-        doLogin();
-      }
-    });
-  }
+    function login() {
+        $("#loginForm").validate({
+            submitHandler: function (form) {
+                doLogin();
+            }
+        });
+    }
 
-  function doLogin() {
-    var inputPass = $("#password").val();
-    var salt = g_password_salt;
-    var str = inputPass + salt.charAt(3) + salt.charAt(2) + salt.charAt(5);
-    var pass = md5(str);
-    $.ajax({
-      url: "/login/doLogin",
-      type: "POST",
-      data: {
-        mobile: $("#mobile").val(),
-        password: pass.toString()
-      },
-      success: function (data) {
-        if (data.code == 200) {
-            msg("成功");
-            window.location.href = "/goods/toList";
-        } else {
-            msg(data.message);
-        }
-      },
-      error: function () {
-        msg("失败");
-      }
-    })
-  }
+    function doLogin() {
+        var inputPass = $("#password").val();
+        var salt = g_password_salt;
+        var str = inputPass + salt.charAt(3) + salt.charAt(2) + salt.charAt(5);
+        var pass = md5(str);
+        $.ajax({
+            url: "/login/doLogin",
+            type: "POST",
+            data: {
+                mobile: $("#mobile").val(),
+                password: pass.toString()
+            },
+            success: function (data) {
+                if (data.code == 200) {
+                    msg("成功");
+                    window.location.href = "/goods/toList";
+                } else {
+                    msg(data.message);
+                }
+            },
+            error: function () {
+                msg("失败");
+            }
+        })
+    }
 </script>
 </html>

@@ -3,7 +3,7 @@
       xmlns:th="http://thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>商品列表</title>
+    <title>商品详情</title>
     <!--jquery-->
     <script type="text/javascript"
             th:src="@{/js/jquery.min.js}"></script>
@@ -35,28 +35,38 @@
     ></script>
 </head>
 <body>
-<div class="text-center"><h2>秒杀商品列表</h2></div>
-<table class="table align-middle mb-4 bg-white" id="goodsList">
-    <thead class="bg-light">
+<div class="text-center"><h2>秒杀订单详情</h2></div>
+<table class="table align-middle mb-4 bg-white" id="goods">
     <tr>
         <td>商品名称</td>
+        <td th:text="${goods.goodsName}" colspan="3"></td>
+    </tr>
+    <tr>
         <td>商品图片</td>
-        <td>商品原价</td>
-        <td>秒杀价</td>
-        <td>库存数量</td>
-        <td>详情</td>
+        <td colspan="2"><img th:src="@{${goods.goodsImg}}" width="200"/></td>
     </tr>
-    </thead>
-    <tbody>
-    <tr th:each="goods,goodsStat : ${goodsList}">
-        <td th:text="${goods.goodsName}"></td>
-        <td><img th:src="@{${goods.goodsImg}}" width="100"/></td>
-        <td th:text="${goods.goodsPrice}"></td>
-        <td th:text="${goods.seckillPrice}"></td>
-        <td th:text="${goods.stockCount}"></td>
-        <td><a th:href="'/goods/toDetail/'+${goods.id}">详情</a></td>
+    <tr>
+        <td>订单状态</td>
+        <td>
+            <span th:if="${order.status eq 0}">未支付</span>
+            <span th:if="${order.status eq 1}">待发货</span>
+            <span th:if="${order.status eq 2}">已发货</span>
+            <span th:if="${order.status eq 3}">已收货</span>
+            <span th:if="${order.status eq 4}">已退款</span>
+            <span th:if="${order.status eq 5}">已完成</span>
+        </td>
+        <td>
+            <button class="btn btn-primary btn-block" type="submit" id="payButton">立即支付</button>
+        </td>
     </tr>
-    </tbody>
+    <tr>
+        <td>收货人</td>
+        <td colspan="2">XXX 12131283921</td>
+    </tr>
+    <tr>
+        <td>收货地址</td>
+        <td colspan="2">上海市</td>
+    </tr>
 
 </table>
 </body>
