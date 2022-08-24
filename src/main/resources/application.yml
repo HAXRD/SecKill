@@ -6,9 +6,9 @@ spring:
   # ?????
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://localhost:3306/seckill?useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Shanghai
+    url: jdbc:mysql://localhost:3306/seckill?useUnicode=true&useSSL=false&characterEncoding=UTF-8&serverTimezone=Asia/Shanghai
     username: root
-    password: root
+    password: password
     # ?????
     hikari:
       pool-name: DataHikariCP
@@ -21,7 +21,7 @@ spring:
       # ????
       auto-commit: true
       # ???????0??????
-      max-lifetime: 1800000
+      max-lifetime: 180000
       # ?????????30000
       connection-timeout: 30000
       # ????????
