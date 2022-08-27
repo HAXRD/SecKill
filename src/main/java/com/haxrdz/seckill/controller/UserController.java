@@ -1,8 +1,11 @@
 package com.haxrdz.seckill.controller;
 
 
+import com.haxrdz.seckill.pojo.User;
+import com.haxrdz.seckill.vo.RespBean;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 /**
  * <p>
@@ -16,4 +19,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @RequestMapping("/user")
 public class UserController {
 
+    @RequestMapping("/info")
+    @ResponseBody
+    public RespBean info(User user) {
+        return RespBean.success(user);
+    }
 }

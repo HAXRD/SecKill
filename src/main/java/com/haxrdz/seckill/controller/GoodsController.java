@@ -29,6 +29,8 @@ public class GoodsController {
 
     /**
      * 获取商品列表
+     * mac优化前: 376qps
+     *
      * @param model
      * @param user
      * @return
