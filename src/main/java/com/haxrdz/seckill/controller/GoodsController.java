@@ -3,7 +3,9 @@ package com.haxrdz.seckill.controller;
 import com.haxrdz.seckill.pojo.User;
 import com.haxrdz.seckill.service.IGoodsService;
 import com.haxrdz.seckill.service.IUserService;
+import com.haxrdz.seckill.vo.DetailVo;
 import com.haxrdz.seckill.vo.GoodsVo;
+import com.haxrdz.seckill.vo.RespBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.ValueOperations;
@@ -67,9 +69,9 @@ public class GoodsController {
         return html;
     }
 
-    @RequestMapping(value = "/toDetail/{goodsId}", produces = "text/html;charset=utf-8")
+    @RequestMapping(value = "/toDetail2/{goodsId}", produces = "text/html;charset=utf-8")
     @ResponseBody
-    public String toDetail(Model model, User user, @PathVariable Long goodsId, HttpServletRequest request, HttpServletResponse response) {
+    public String toDetail2(Model model, User user, @PathVariable Long goodsId, HttpServletRequest request, HttpServletResponse response) {
         ValueOperations valueOperations = redisTemplate.opsForValue();
         String html = (String) valueOperations.get("goodsDetail:" + goodsId);
         if (!StringUtils.isEmpty(html)) {
@@ -104,5 +106,36 @@ public class GoodsController {
             valueOperations.set("goodsDetail:" + goodsId, html, 60, TimeUnit.SECONDS);
         }
         return html;
+    }
+
+
+    @RequestMapping(value = "/toDetail/{goodsId}")
+    @ResponseBody
+    public RespBean toDetail(User user, @PathVariable Long goodsId) {
+
+        GoodsVo goodsVo = goodsService.findGoodsVoByGoodsId(goodsId);
+        Date startDate = goodsVo.getStartDate();
+        Date endDate = goodsVo.getEndDate();
+        Date nowDate = new Date();
+
+        // 秒杀状态
+        int seckillStatus = 0;
+        int remainSeconds = 0;
+        // 秒杀还未开始
+        if (nowDate.before(startDate)) {
+            remainSeconds = ((int)((startDate.getTime() - nowDate.getTime()) / 1000));
+        } else if (nowDate.after(endDate)) {
+            seckillStatus = 2;
+            remainSeconds = -1;
+        } else {
+            seckillStatus = 1;
+            remainSeconds = 0;
+        }
+        DetailVo detailVo = new DetailVo();
+        detailVo.setUser(user);
+        detailVo.setGoodsVo(goodsVo);
+        detailVo.setSeckillStatus(seckillStatus);
+        detailVo.setRemainSeconds(remainSeconds);
+        return RespBean.success(detailVo);
     }
 }
