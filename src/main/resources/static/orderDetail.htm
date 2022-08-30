@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>商品详情</title>
+    <!--jquery-->
+    <script type="text/javascript"
+            src="/js/jquery.min.js"></script>
+    <!--common-->
+    <script type="text/javascript"
+            src="/js/common.js"></script>
+    <!--layer-->
+    <script type="text/javascript"
+            src="/js/layer.js"></script>
+    <!-- Font Awesome -->
+    <link
+            href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
+            rel="stylesheet"
+    />
+    <!-- Google Fonts -->
+    <link
+            href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap"
+            rel="stylesheet"
+    />
+    <!-- MDB -->
+    <link
+            href="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/4.4.0/mdb.min.css"
+            rel="stylesheet"
+    />
+    <!-- MDB -->
+    <script
+            type="text/javascript"
+            src="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/4.4.0/mdb.min.js"
+    ></script>
+</head>
+<body>
+<div class="text-center"><h2>秒杀订单详情</h2></div>
+<table class="table align-middle mb-4 bg-white" id="goods">
+    <tr>
+        <td>商品名称</td>
+        <td id="goodsName" colspan="3"></td>
+    </tr>
+    <tr>
+        <td>商品图片</td>
+        <td colspan="2"><img id="goodsImg" width="200"/></td>
+    </tr>
+    <tr>
+        <td>订单价格</td>
+        <td id="goodsPrice" colspan="3"></td>
+    </tr>
+    <tr>
+        <td>下单时间</td>
+        <td id="createDate" colspan="3"></td>
+    </tr>
+    <tr>
+        <td>订单状态</td>
+        <td id="status">
+<!--            <span th:if="${order.status eq 0}">未支付</span>-->
+<!--            <span th:if="${order.status eq 1}">待发货</span>-->
+<!--            <span th:if="${order.status eq 2}">已发货</span>-->
+<!--            <span th:if="${order.status eq 3}">已收货</span>-->
+<!--            <span th:if="${order.status eq 4}">已退款</span>-->
+<!--            <span th:if="${order.status eq 5}">已完成</span>-->
+        </td>
+        <td>
+            <button class="btn btn-primary btn-block" type="submit" id="payButton">立即支付</button>
+        </td>
+    </tr>
+    <tr>
+        <td>收货人</td>
+        <td colspan="2">XXX 12131283921</td>
+    </tr>
+    <tr>
+        <td>收货地址</td>
+        <td colspan="2">上海市</td>
+    </tr>
+
+</table>
+</body>
+<script>
+    $(function () {
+       getOrderDetail();
+    });
+
+    function getOrderDetail() {
+        var orderId = g_getQueryString("orderId");
+        $.ajax({
+            url: '/order/detail',
+            type: 'GET',
+            data: {
+                orderId: orderId
+            },
+            success: function (data) {
+                if (data.code == 200) {
+                    render(data.obj);
+                } else {
+                    msg(data.message);
+                }
+            },
+            error: function () {
+                msg("客户端请求错误");
+            }
+        });
+    }
+
+    function render(detail) {
+        var goods = detail.goods;
+        var order = detail.order;
+        $("#goodsName").text(goods.goodsName);
+        $("#goodsImg").attr("src", goods.goodsImg);
+        $("#goodsPrice").text(order.goodsPrice);
+        $("#createDate").text(new Date(order.createDate).format("yyyy-MM-dd HH:mm:ss"));
+        var status = order.status;
+        var statusText = "";
+        switch (status) {
+            case 0:
+                statusText = "未支付";
+                break;
+            case 1:
+                statusText = "待发货";
+                break;
+            case 2:
+                statusText = "已发货";
+                break;
+            case 3:
+                statusText = "已收货";
+                break;
+            case 4:
+                statusText = "已退款";
+                break;
+            case 5:
+                statusText = "已完成";
+                break;
+        }
+        $("#status").text(statusText);
+    }
+</script>
+</html>

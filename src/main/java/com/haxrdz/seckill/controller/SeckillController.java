@@ -15,6 +15,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 @Controller
 @RequestMapping("/seckill")
@@ -35,8 +37,8 @@ public class SeckillController {
      * @param goodsId
      * @return
      */
-    @RequestMapping("/doSeckill")
-    public String doSeckill(Model model, User user, Long goodsId) {
+    @RequestMapping("/doSeckill2")
+    public String doSeckill2(Model model, User user, Long goodsId) {
         if (user == null) {
             return "/login";
         }
@@ -57,5 +59,34 @@ public class SeckillController {
         model.addAttribute("order", order);
         model.addAttribute("goods", goods);
         return "orderDetail";
+    }
+
+    /**
+     * Mac优化前QPS：550
+     * @param model
+     * @param user
+     * @param goodsId
+     * @return
+     */
+    @RequestMapping(value = "/doSeckill", method = RequestMethod.POST)
+    @ResponseBody
+    public RespBean doSeckill(Model model, User user, Long goodsId) {
+        if (user == null) {
+            return RespBean.error(RespBeanEnum.SESSION_ERROR);
+        }
+        GoodsVo goods = goodsService.findGoodsVoByGoodsId(goodsId);
+        // 判断库存
+        if (goods.getStockCount() < 1) {
+            model.addAttribute("errmsg", RespBeanEnum.EMPTY_STOCK);
+            return RespBean.error(RespBeanEnum.EMPTY_STOCK);
+        }
+        // 判断订单是否重复
+        SeckillOrder seckillOrder = seckillOrderService.getOne(new QueryWrapper<SeckillOrder>().eq("user_id", user.getId()).eq("goods_id", goodsId));
+        if (seckillOrder != null) {
+            model.addAttribute("errmsg", RespBeanEnum.REPEATED_ORDER);
+            return RespBean.error(RespBeanEnum.REPEATED_ORDER);
+        }
+        Order order = orderService.seckill(user, goods);
+        return RespBean.success(order);
     }
 }
